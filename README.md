@@ -1,5 +1,11 @@
 # Getting Started with Create React App
 
+Node, npm 설치후 npm run start 또는 npm start 명령어로 실행
+localhost:3000 웹브라우저로 접속
+필요한 페이지 및 기능 말하면 추가함
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
