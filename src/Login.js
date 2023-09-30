@@ -25,6 +25,10 @@ const Login = () => {
     console.log('게스트 로그인');
   };
 
+  const webSocketTest = () => {
+    navigate('/wstest');
+  }
+
   return (
     <div
     style={{
@@ -49,6 +53,10 @@ const Login = () => {
       <div style={{ marginBottom: '20px' }}></div> {/* 간격 조절 */}
       <button onClick={handleGuestLogin} style={{ width: '100%' }}>
         Guest Login
+      </button>
+
+      <button onClick={webSocketTest} style={{ width: '100%' }}>
+        이거누르면 소켓연결
       </button>
     </div>
   </div>
