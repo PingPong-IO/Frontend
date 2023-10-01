@@ -22,7 +22,12 @@ const Login = () => {
 
   const handleGuestLogin = () => {
     axios.post('http://localhost:8080/api/users/guest-login')
-    console.log('게스트 로그인');
+    .then(() => {
+      navigate('/wstest');
+    })
+    .catch((error) => {
+      alert(error, 'Login failed. Please check your credentials.');
+    });
   };
 
   const webSocketTest = () => {
@@ -51,6 +56,7 @@ const Login = () => {
         Login
       </button>
       <div style={{ marginBottom: '20px' }}></div> {/* 간격 조절 */}
+      
       <button onClick={handleGuestLogin} style={{ width: '100%' }}>
         Guest Login
       </button>
