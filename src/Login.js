@@ -20,6 +20,10 @@ const Login = () => {
     });
   };
 
+  const handleSignIn = () => {
+    navigate('/sign_in');
+  };
+
   const handleGuestLogin = () => {
     axios.post('http://localhost:8080/api/users/guest-login')
     .then(() => {
@@ -54,6 +58,9 @@ const Login = () => {
       />
       <button onClick={handleLogin} style={{ width: '100%' }}>
         Login
+      </button>
+      <button onClick={handleSignIn} style={{ width: '100%' }}>
+        회원가입
       </button>
       <div style={{ marginBottom: '20px' }}></div> {/* 간격 조절 */}
       
