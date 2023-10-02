@@ -10,7 +10,7 @@ const WebSocketComponent = () => {
     setSocket(newSocket);
 
     newSocket.onopen = () => {
-      console.log('WebSocket 연결 성공!');
+      console.log('WebSocket 연결 성공!!');
     };
 
     newSocket.onmessage = (event) => {
