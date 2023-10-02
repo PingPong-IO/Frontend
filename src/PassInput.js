@@ -1,26 +1,60 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PassInput = () => {
-  const [username, setUsername] = useState('');
+  const { username } = useParams();
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const apiUrl = `/api/startGame?username=${username}`;
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+	const apiUrl = 'http://localhost:8080/api/users/login';
+    const requestData = {
+      nickname: username,
+      password: password,
+    };
 
     axios
-      .get(apiUrl)
+      .post(apiUrl, requestData)
       .then((response) => {
-        // 게임 시작 후 다음 페이지로 이동 (게임 페이지)
-        // response.data에서 게임 상태 등을 받아와서 사용할 수 있습니다.
-        console.log('Game Started:', response.data);
+		navigate('/wstest');
+        console.log('Login Successful:', response.data);
       })
       .catch((error) => {
-        console.error('Failed to start the game:', error);
-      });
+        if (error.response && error.response.status === 401) {
+			alert('Invalid password. Please try again.');
+			setPassword('');
+		  } else {
+			// 서버에서의 오류 처리
+			console.error('Login Failed:', error.response.data.error);
+		  }
+		});
   };
+
   return (
     <div>
-      <h1>비밀번호를 입력하세요.</h1>
+      <h1>Password Input Page</h1>
+      <p>Username: {username}</p>
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            required
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 };

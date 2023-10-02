@@ -11,9 +11,9 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/password_input" element={<PassInput />} />
+          <Route path="/password_input/:username" element={<PassInput />} />
           <Route path="/wstest" element={<WebSocketComponent />} />
-          <Route path="/sign_in" element={<SignIn />} />
+          <Route path="/sign_in/:username" element={<SignIn />} />
           {/* 다른 페이지 라우트를 추가하세요. */}
         </Routes>
       </div>
