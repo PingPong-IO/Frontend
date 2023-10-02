@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const WebSocketComponent = () => {
   const [socket, setSocket] = useState(null);
-//   const [inputMessage, setInputMessage] = useState('');
+  const navigate = useNavigate();
+  //   const [inputMessage, setInputMessage] = useState('');
 
   useEffect(() => {
     // WebSocket 객체 생성 및 연결
@@ -14,28 +16,25 @@ const WebSocketComponent = () => {
     };
 
     newSocket.onmessage = (event) => {
-      // 서버로부터 메시지를 받을 때의 로직을 여기에 작성합니다.
-      console.log('받은 메시지:', event.data);
+      if (event.data === 'intervalTest') {
+        console.log('이벤트가 잘오는군요 ㅎㅎ', event.data);
+      }
     };
-    // 컴포넌트가 언마운트 시 연결 해제
     return () => {
       newSocket.close();
     };
   }, []);
 
   const handleMatching = () => {
-	if (socket) {
-	  socket.send('matching');
-	}
+    if (socket) {
+      socket.send('matching');
+    }
   };
 
-//   const sendMessage = () => {
-// 	if (socket && inputMessage) {
-// 	  socket.send(inputMessage); // 입력한 메시지를 서버로 전송
-// 	  setInputMessage(''); // 입력 필드 초기화
-// 	}
-//   };
-
+  const handleSoloPlay = () => {
+    console.log('솔로 플레이 시작');
+    navigate('/single');
+  };
 
   return (
     <div>
@@ -43,6 +42,9 @@ const WebSocketComponent = () => {
       <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
         <button onClick={handleMatching} style={{ width: '100%' }}>
           빠른 매칭
+        </button>
+        <button onClick={handleSoloPlay} style={{ width: '100%' }}>
+          솔로 플레이
         </button>
       </div>
     </div>

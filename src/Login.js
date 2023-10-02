@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ModalDialog from './ModalDialog';
-import './ModalDialog.css'; 
+import './ModalDialog.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -21,13 +21,18 @@ const Login = () => {
   };
 
   const guestLogin = () => {
-    axios.post('http://localhost:8080/api/users/guest-login')
-    .then(() => {
-      navigate('/wstest');
-    })
-    .catch((error) => {
-      alert(error, 'Login failed. Please check your credentials.');
-    });
+    axios
+      .post(
+        'http://localhost:8080/api/users/guest-login',
+        {},
+        { withCredentials: true },
+      )
+      .then(() => {
+        navigate('/wstest');
+      })
+      .catch((error) => {
+        alert(error, 'Login failed. Please check your credentials.');
+      });
   };
 
   const handleSignin = () => {
@@ -65,9 +70,7 @@ const Login = () => {
       }}
     >
       <h1>아름 Login Page 다운</h1>
-      <div
-        style={{ display: 'flex', flexDirection: 'column', width: '200px' }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
         <input
           type="text"
           placeholder="username"
@@ -82,11 +85,11 @@ const Login = () => {
       {isModalOpen && (
         <div className="modal">
           <ModalDialog
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        handleSignin={handleSignin}
-        guestLogin={guestLogin}
-      />
+            isOpen={isModalOpen}
+            closeModal={closeModal}
+            handleSignin={handleSignin}
+            guestLogin={guestLogin}
+          />
         </div>
       )}
     </div>
