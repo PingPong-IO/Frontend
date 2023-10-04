@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
 
 const WebSocketComponent = () => {
   const [socket, setSocket] = useState(null);
@@ -8,8 +9,9 @@ const WebSocketComponent = () => {
 
   useEffect(() => {
     // WebSocket 객체 생성 및 연결
-    const newSocket = new WebSocket('ws://localhost:8080/websocket/game');
+    const newSocket = new SockJS('http://localhost:8080/websocket/game');
     setSocket(newSocket);
+    // const newSocket = new WebSocket('ws://localhost:8080/websocket/game');
 
     newSocket.onopen = () => {
       console.log('WebSocket 연결 성공!!');
