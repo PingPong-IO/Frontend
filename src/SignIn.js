@@ -26,7 +26,7 @@ const SignIn = () => {
     }
 
     // 여기에서 password와 email 값을 사용하여 로그인 요청을 보낼 수 있습니다.
-    axios.post('http://localhost:8080/api/users/', {
+    axios.post('http://localhost:8081/api/users/', {
       nickname: username,
       password: password,
       email: email, // 이메일 값 전달

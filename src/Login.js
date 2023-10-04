@@ -23,7 +23,7 @@ const Login = () => {
   const guestLogin = () => {
     axios
       .post(
-        'http://localhost:8080/api/users/guest-login',
+        'http://localhost:8081/api/users/guest-login',
         {},
         { withCredentials: true },
       )
@@ -44,7 +44,7 @@ const Login = () => {
       guestLogin();
       return;
     }
-    const apiUrl = 'http://localhost:8080/api/users/exists/' + username;
+    const apiUrl = 'http://localhost:8081/api/users/exists/' + username;
     axios
       .get(apiUrl)
       .then((response) => {
