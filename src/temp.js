@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
@@ -44,55 +44,61 @@ const DoughnutIndicator = styled.circle`
 `;
 
 const StompComponent = () => {
-  const [socket, setSocket] = useState(null);
   const [modeSelectModalOpen, setModeSelectModalOpen] = useState(false);
   const [progressModalOpen, setProgressModalOpen] = useState(false);
   const [matchingProgress, setMatchingProgress] = useState(0);
-  const [currentUser, setCurrentUser] = useState(null); // [TODO] 현재 유저 정보수를 받아오는 envent 추가 필요
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const socket = useRef(null);
 
   useEffect(() => {
-    // WebSocket 객체 생성 및 연결
-    const socketJs = new SockJS('http://localhost:8080/stomp/test');
-    const newSocket = Stomp.over(socketJs);
-    newSocket.connect({}, () => {
-      console.log('STOMP Connected!');
-    });
-    setSocket(newSocket);
+    console.log('page mounted');
+    if (!socket.current) {
+      console.log('socket is null');
+      // WebSocket 객체 생성 및 연결
+      const socketJs = new SockJS('http://localhost:8080/stomp/test');
+      const newSocket = Stomp.over(socketJs);
+      newSocket.connect({}, () => {
+        console.log('STOMP Connected!');
+      });
+      socket.current = newSocket;
+    }
     return () => {
-      if (socket && socket.connected) {
+      if (socket.current && socket.current.connected) {
         socket.disconnect();
         console.log('STOMP Disconnected!');
       }
       console.log('page unmounted');
-    }
+    };
   }, []);
 
   const handleOneToOne = () => {
-    if (socket) {
-      socket.send('/stomp/matchingJoin');
+    if (socket.current) {
+      if (isSubscribed) {
+        setIsSubscribed(false);
+        socket.current.unsubscribe(`/topic/matching-success`);
+        socket.current.send('/stomp/cancelMatching');
+        setMessage('Matching canceled');
+      } else {
+        socket.current.send('/stomp/matchingJoin');
+        setIsSubscribed(true);
+        const subscription = socket.current.subscribe(
+          `/topic/matching-success`,
+          (response) => {
+            const message = JSON.parse(response.body);
+            const gameRoomId = message.gameRoomId;
+            console.log('Received game room ID:', gameRoomId);
+          },
+        );
+        return () => {
+          if (subscription) {
+            subscription.unsubscribe();
+          }
+        };
+      }
     }
-  }
-
-  useEffect(() => {
-    console.log(1);
-    if (socket && socket.connected) {
-      console.log(2);
-      const sessionId = socket.ws._transport.url.split('/')[5];
-      console.log(`Session ID: ${sessionId}`);
-      const subscription = socket.subscribe(`/user/${sessionId}/topic/matching-success`, (response) => {
-        const message = JSON.parse(response.body);
-        const gameRoomId = message.gameRoomId;
-        console.log('Received game room ID:', gameRoomId);
-      });
-
-      return () => {
-        if (subscription) {
-          subscription.unsubscribe();
-        }
-      };
-    }
-  }, [socket]);
+  };
 
   useEffect(() => {
     let interval;
@@ -105,15 +111,17 @@ const StompComponent = () => {
   }, [progressModalOpen]);
 
   const handleModeSelection = (mode) => {
-    if (socket) {
-      socket.send(mode === 'normal' ? 'normal_matching' : 'speed_matching');
+    if (socket.current) {
+      socket.current.send(
+        mode === 'normal' ? 'normal_matching' : 'speed_matching',
+      );
       setModeSelectModalOpen(false);
       setProgressModalOpen(true);
     }
   };
 
   const handleCancelMatching = () => {
-    if (socket) socket.send('cancel_matching');
+    if (socket.current) socket.current.send('cancel_matching');
     setMatchingProgress(0);
     setProgressModalOpen(false);
   };
@@ -138,7 +146,9 @@ const StompComponent = () => {
           Quick Match
         </Button>
         <Button onClick={handleSoloPlay}>Solo Play</Button>
-        <Button onClick={handleOneToOne}>1 : 1</Button>
+        <Button onClick={handleOneToOne}>
+        {isSubscribed ? 'Cancel Matching' : '1 : 1'}
+        </Button>
       </div>
       <Modal
         ariaHideApp={false}
