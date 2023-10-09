@@ -1,6 +1,7 @@
-const SingleMode = (canvasRef, gameElement) => {
+const GameRender = (canvasRef, gameElement) => {
+  console.log("1");
   if (!canvasRef.current) return;
-
+  console.log("2");
   const cvs = canvasRef.current;
 
   const ctx = cvs.getContext('2d');
@@ -92,4 +93,4 @@ const SingleMode = (canvasRef, gameElement) => {
   game();
 };
 
-export default SingleMode;
+export default GameRender;

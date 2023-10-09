@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import { initializeSocket, getStompSocket } from './api/StompSocket';
 
 const Button = styled.button`
   padding: 10px;
@@ -48,27 +47,24 @@ const StompComponent = () => {
   const [progressModalOpen, setProgressModalOpen] = useState(false);
   const [matchingProgress, setMatchingProgress] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const socket = useRef(null);
 
   useEffect(() => {
     console.log('page mounted');
+    initializeSocket();
+    socket.current = getStompSocket();
     if (!socket.current) {
       console.log('socket is null');
-      // WebSocket 객체 생성 및 연결
-      const socketJs = new SockJS('http://localhost:8080/stomp/test');
-      const newSocket = Stomp.over(socketJs);
-      newSocket.connect({}, () => {
+      socket.connect({}, () => {
         console.log('STOMP Connected!');
       });
-      socket.current = newSocket;
     }
     return () => {
-      if (socket.current && socket.current.connected) {
-        socket.disconnect();
-        console.log('STOMP Disconnected!');
-      }
+      // if (socket.current && socket.current.connected) {
+        // socket.current.disconnect();
+      //   console.log('STOMP Disconnected!');
+      // }
       console.log('page unmounted');
     };
   }, []);
@@ -77,9 +73,8 @@ const StompComponent = () => {
     if (socket.current) {
       if (isSubscribed) {
         setIsSubscribed(false);
-        socket.current.unsubscribe(`/topic/matching-success`);
         socket.current.send('/stomp/cancelMatching');
-        setMessage('Matching canceled');
+        socket.current.unsubscribe(`/topic/matching-success`);
       } else {
         socket.current.send('/stomp/matchingJoin');
         setIsSubscribed(true);
@@ -89,6 +84,7 @@ const StompComponent = () => {
             const message = JSON.parse(response.body);
             const gameRoomId = message.gameRoomId;
             console.log('Received game room ID:', gameRoomId);
+            navigate(`/game-room/${gameRoomId}`, { state: { gameRoomId } });
           },
         );
         return () => {
