@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import GameRender from './GameRender';
 import { getStompSocket } from '../api/StompSocket';
+import PaddleManager from './PaddleManager';
 
 const initialCanvasSize = {
 	width: 600,
@@ -34,8 +35,9 @@ const GameRoom = () => {
     const subscription = socket.current.subscribe(
       `/topic/position_update/${gameRoomId}`,
       (response) => {
+		console.log(`canvas height: ${canvasRef.current.height}`);
         const message = JSON.parse(response.body);
-		GameRender(canvasRef.current, message);
+		GameRender(canvasRef, message);
       },
     );
   };
@@ -73,6 +75,7 @@ const GameRoom = () => {
   return (
 	<>
 		<canvas ref={canvasRef} width={canvasSize.width} height={canvasSize.height} />
+		<PaddleManager open={true} gameRoomId={gameRoomId} />
 	</>
   )
 };

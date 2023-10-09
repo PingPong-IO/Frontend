@@ -1,7 +1,5 @@
 const GameRender = (canvasRef, gameElement) => {
-  console.log("1");
   if (!canvasRef.current) return;
-  console.log("2");
   const cvs = canvasRef.current;
 
   const ctx = cvs.getContext('2d');
@@ -62,9 +60,9 @@ const GameRender = (canvasRef, gameElement) => {
 
   const render = () => {
     drawPaddle(0, 0, cvs.width, cvs.height, 'BLACK');
-    drawScore(gameElement.score.left, cvs.width / 4, cvs.height / 5, 'WHITE');
+    drawScore(gameElement.leftScore, cvs.width / 4, cvs.height / 5, 'WHITE');
     drawScore(
-      gameElement.score.right,
+      gameElement.rightScore,
       (3 * cvs.width) / 4,
       cvs.height / 5,
       'WHITE',
