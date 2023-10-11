@@ -112,14 +112,14 @@ const GameRoom = () => {
   }, [keyPressed]);
 
   return (
-    <>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <canvas
         ref={canvasRef}
         width={canvasSize.width}
         height={canvasSize.height}
       />
-      <PaddleManager open={true} gameRoomId={gameRoomId} />
-    </>
+      {/* <PaddleManager open={true} gameRoomId={gameRoomId} /> */}
+    </div>
   );
 };
 
