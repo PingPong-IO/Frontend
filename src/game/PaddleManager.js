@@ -8,19 +8,20 @@ const PaddleManager = ({ open, gameRoomId }) => {
   useEffect(() => {
     socket.current = getStompSocket();
     return () => {
-      console.log('page unmounted');
     };
   }, []);
 
   useEffect(() => {
+    console.log('Paddle Move page Event!!!!!!');
     const movePaddle = (newKeyPressed) => {
-		socket.current.send(`/stomp/paddle_move`, {}, JSON.stringify({
+		socket.current.send(`/stomp/paddle_move/${gameRoomId}`, {}, JSON.stringify({
 			gameRoomId,
 			paddleStatus: newKeyPressed,
 		  }));
     };
     if (!open) {
       const handleKeyMove = async (event) => {
+      console.log('찍히긴 함1');
         if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
           const newKeyPressed = event.key === 'ArrowUp' ? 1 : 2;
           if (keyPressed !== newKeyPressed) {
@@ -30,6 +31,7 @@ const PaddleManager = ({ open, gameRoomId }) => {
         }
       };
       const handleKeyStopper = (event) => {
+      console.log('찍히긴 함2');
         if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
           setKeyPressed(0);
           movePaddle(0);
