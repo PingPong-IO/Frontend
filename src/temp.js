@@ -62,7 +62,7 @@ const StompComponent = () => {
     }
     return () => {
       // if (socket.current && socket.current.connected) {
-        // socket.current.disconnect();
+      // socket.current.disconnect();
       //   console.log('STOMP Disconnected!');
       // }
       console.log('page unmounted');
@@ -83,8 +83,8 @@ const StompComponent = () => {
           (response) => {
             const message = JSON.parse(response.body);
             const gameRoomId = message.gameRoomId;
-            console.log('Received game room ID:', gameRoomId);
-            navigate(`/game-room/${gameRoomId}`, { state: { gameRoomId } });
+              console.log('Received game room ID:', gameRoomId);
+              navigate(`/game-room/${gameRoomId}`, { state: { gameRoomId } });
           },
         );
         return () => {
@@ -93,6 +93,21 @@ const StompComponent = () => {
           }
         };
       }
+    }
+  };
+
+  const handleSoloPlay = () => {
+    if (socket.current) {
+      const subscription = socket.current.subscribe(
+        `/topic/matching-success`,
+        (response) => {
+          const message = JSON.parse(response.body);
+          const gameRoomId = message.gameRoomId;
+          console.log('solo play lollol~');
+          navigate(`/single/${gameRoomId}`, { state: { gameRoomId } });
+        },
+      );
+      socket.current.send('/stomp/SingleMode');
     }
   };
 
@@ -122,8 +137,6 @@ const StompComponent = () => {
     setProgressModalOpen(false);
   };
 
-  const handleSoloPlay = () => navigate('/single');
-
   return (
     <div
       style={{
@@ -143,7 +156,7 @@ const StompComponent = () => {
         </Button>
         <Button onClick={handleSoloPlay}>Solo Play</Button>
         <Button onClick={handleOneToOne}>
-        {isSubscribed ? 'Cancel Matching' : '1 : 1'}
+          {isSubscribed ? 'Cancel Matching' : '1 : 1'}
         </Button>
       </div>
       <Modal
