@@ -76,17 +76,21 @@ const StompComponent = () => {
         socket.current.send('/stomp/cancelMatching');
         socket.current.unsubscribe(`/topic/matching-success`);
       } else {
-        socket.current.send('/stomp/matchingJoin');
         setIsSubscribed(true);
         const subscription = socket.current.subscribe(
           `/topic/matching-success`,
           (response) => {
             const message = JSON.parse(response.body);
             const gameRoomId = message.gameRoomId;
-              console.log('Received game room ID:', gameRoomId);
-              navigate(`/game-room/${gameRoomId}`, { state: { gameRoomId } });
+            console.log('Received game room ID:', gameRoomId);
+            navigate(`/game-room/${gameRoomId}`, { state: { gameRoomId } });
           },
         );
+        const payload = {
+          mode: 'NORMAL',
+          type: 'ONE_ON_ONE',
+        };
+        socket.current.send('/stomp/matchingJoin', {}, JSON.stringify(payload));
         return () => {
           if (subscription) {
             subscription.unsubscribe();
@@ -107,7 +111,11 @@ const StompComponent = () => {
           navigate(`/single/${gameRoomId}`, { state: { gameRoomId } });
         },
       );
-      socket.current.send('/stomp/SingleMode');
+      const payload = {
+        mode: 'SOLO',
+        type: 'SOLO',
+      };
+      socket.current.send('/stomp/matchingJoin', {}, JSON.stringify(payload));
     }
   };
 
