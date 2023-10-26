@@ -21,13 +21,20 @@ const Login = () => {
   };
 
   const guestLogin = () => {
+    const localNickname = localStorage.getItem("userNickname");
     axios
       .post(
-        'http://localhost:8080/api/users/guest-login',
-        { withCredentials: true },
-      )
-      .then(() => {
-        navigate('/wstest');
+        'http://localhost:8081/api/users/guest-login',{}, {
+          withCredentials: true
+          , headers : {
+            "X-Guest-ID" : (localNickname === null) ? "" : localNickname
+            }
+          }, // 옵션 객체에 withCredentials를 설정합니다.
+        )
+      .then((response) => {
+        const nickname = response.data;
+        if ( nickname !== localNickname) { localStorage.setItem("userNickname", nickname); }
+        navigate(`/wstest/${nickname}`);
       })
       .catch((error) => {
         alert(error, 'Login failed. Please check your credentials.');
@@ -43,7 +50,7 @@ const Login = () => {
       guestLogin();
       return;
     }
-    const apiUrl = 'http://localhost:8080/api/users/exists/' + username;
+    const apiUrl = 'http://localhost:8081/api/users/exists/' + username;
     axios
       .get(apiUrl)
       .then((response) => {
@@ -68,7 +75,6 @@ const Login = () => {
         minHeight: '100vh', // 화면 높이를 최소화하여 화면 정중앙에 배치
       }}
     >
-      <h1>아름 Login Page 다운</h1>
       <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
         <input
           type="text"

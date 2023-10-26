@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { initializeSocket, getStompSocket } from './api/StompSocket';
@@ -47,12 +47,14 @@ const StompComponent = () => {
   const [progressModalOpen, setProgressModalOpen] = useState(false);
   const [matchingProgress, setMatchingProgress] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
+//  const [roomListModalOpen, setRoomListModalOpen] = useState(false);
+  const { nickname } = useParams();
   const navigate = useNavigate();
   const socket = useRef(null);
 
   useEffect(() => {
     console.log('page mounted');
-    initializeSocket();
+    initializeSocket(nickname);
     socket.current = getStompSocket();
     if (!socket.current) {
       console.log('socket is null');
@@ -76,6 +78,7 @@ const StompComponent = () => {
         socket.current.send('/stomp/cancelMatching');
         socket.current.unsubscribe(`/topic/matching-success`);
       } else {
+        socket.current.send('/stomp/matchingJoin');
         setIsSubscribed(true);
         const subscription = socket.current.subscribe(
           `/topic/matching-success`,
@@ -166,6 +169,7 @@ const StompComponent = () => {
         <Button onClick={handleOneToOne}>
           {isSubscribed ? 'Cancel Matching' : '1 : 1'}
         </Button>
+        <Button onClick={() => navigate('/rooms')}> Room List </Button>
       </div>
       <Modal
         ariaHideApp={false}

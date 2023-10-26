@@ -5,11 +5,11 @@ import Stomp from 'stompjs';
 
 let stompSocket = null;
 
-export const initializeSocket = () => {
+export const initializeSocket = (username) => {
   if (!stompSocket) {
-    const socketJs = new SockJS('http://localhost:8080/stomp/test');
+    const socketJs = new SockJS('http://localhost:8081/stomp/test');
     stompSocket = Stomp.over(socketJs);
-    stompSocket.connect({}, () => {
+    stompSocket.connect({username}, () => {
       console.log('STOMP Connected!');
     });
   }
