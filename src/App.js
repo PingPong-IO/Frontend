@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/password_input/:username" element={<PassInput />} />
-          <Route path="/wstest" element={<StompComponent />} />
+          <Route path="/wstest/:nickname" element={<StompComponent />} />
           <Route path="/sign_in/:username" element={<SignIn />} />
           <Route path="/game-room/:roomName" element={<GameRoom />} />
           <Route path="/single/:roomName" element={<SingleMode />} />
