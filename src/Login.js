@@ -5,9 +5,9 @@ import ModalDialog from './ModalDialog';
 import './ModalDialog.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [username, setUsername] = useState('');
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -61,7 +61,8 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.error('Failed to start the game:', error);
+        const errorMessage = error.response && error.response.data ? error.response.data.message : 'Something went wrong!';
+        alert(errorMessage);
       });
   };
 
