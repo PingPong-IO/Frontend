@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { initializeSocket, getStompSocket } from './api/StompSocket';
+import './css/Login.css';
 
 const Button = styled.button`
   padding: 10px;
@@ -149,27 +150,31 @@ const StompComponent = () => {
   };
 
   return (
-    <div
-      style={{
-        color: '#0ff',
-        backgroundColor: '#000',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <h1>Main Page</h1>
-      <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
-        <Button onClick={() => setModeSelectModalOpen(true)}>
-          Quick Match
-        </Button>
-        <Button onClick={handleSoloPlay}>Solo Play</Button>
-        <Button onClick={handleOneToOne}>
-          {isSubscribed ? 'Cancel Matching' : '1 : 1'}
-        </Button>
-        <Button onClick={() => navigate('/rooms')}> Room List </Button>
+    <div className="app">
+      <header className="app-header">
+        <h1>PONG.IO</h1>
+      </header>
+      <div className="top-bar">
+        <button className="top-button">Home</button>
+        <button className="user-info-btn">
+          <span className="user-identifier">GUEST-80060E8</span>
+          <span className="user-status">ANONYMOUS</span>
+          <div className="user-avatar"></div>
+        </button>
+      </div>
+      <div className="content">
+        <div className="menu">
+          <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
+            <Button onClick={() => setModeSelectModalOpen(true)}>
+              Quick Match
+            </Button>
+            <Button onClick={handleSoloPlay}>Solo Play</Button>
+            <Button onClick={handleOneToOne}>
+              {isSubscribed ? 'Cancel Matching' : '1 : 1'}
+            </Button>
+            <Button onClick={() => navigate('/rooms')}> Room List </Button>
+          </div>
+        </div>
       </div>
       <Modal
         ariaHideApp={false}
@@ -193,7 +198,6 @@ const StompComponent = () => {
           <Button onClick={() => handleModeSelection('fast')}>Fast</Button>
         </ModalContent>
       </Modal>
-
       <Modal
         isOpen={progressModalOpen}
         onRequestClose={() => setProgressModalOpen(false)}
@@ -225,6 +229,9 @@ const StompComponent = () => {
           <Button onClick={handleCancelMatching}>Cancel Matching</Button>
         </ModalContent>
       </Modal>
+      <footer className="footer">
+        WELCOME
+      </footer>
     </div>
   );
 };
