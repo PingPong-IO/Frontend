@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ModalDialog from './ModalDialog';
 import './ModalDialog.css';
+import './css/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [username, setUsername] = useState('');
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -66,28 +67,32 @@ const Login = () => {
       });
   };
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh', // 화면 높이를 최소화하여 화면 정중앙에 배치
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
-        <input
-          type="text"
-          placeholder="username"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-        <button onClick={handleJoin} style={{ width: '100%' }}>
-          JOIN
-        </button>
-      </div>
+   return (
+    <div className="app">
+      <header className="app-header">
+        <h1>PONG.IO</h1>
+      </header>
 
+      <main className="main-content">
+        <section className="statistics">
+          <div className="stat-item">
+            <p>TOTAL PLAYERS</p>
+          </div>
+          <div className="stat-item">
+            <p>GAMES PLAYED</p>
+          </div>
+          <div className="stat-item">
+            <p>HOURS PLAYED</p>
+          </div>
+        </section>
+        <section className="join-section">
+          <input type="text" className="join-input" onChange={handleUsernameChange} placeholder="USERNAME" />
+          <button onClick={handleJoin} className="join-btn">JOIN</button>
+        </section>
+      </main>
+      <footer className="app-footer">
+        <p>JH</p>
+      </footer>
       {isModalOpen && (
         <div className="modal">
           <ModalDialog
@@ -97,9 +102,9 @@ const Login = () => {
             guestLogin={guestLogin}
           />
         </div>
-      )}
+        )}
     </div>
-  );
-};
+    );
+}
 
 export default Login;

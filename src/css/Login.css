@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.app {
+  font-family: 'Press Start 2P', cursive;
+  background-color: #000;
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2em 0;
+}
+
+.app-header {
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+
+.main-content {
+  width: 80%;
+  max-width: 600px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statistics {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2em;
+}
+
+.stat-item p {
+  margin: 0;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.stat-item p:first-child {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.join-section {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.join-input {
+  padding: 10px;
+  font-size: 1em;
+  margin-bottom: 1em;
+  width: 100%;
+  border: 1px solid #fff;
+  background-color: #333;
+  color: #fff;
+}
+
+.join-btn {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.join-btn:hover {
+  background-color: #555;
+}
+
+.app-footer {
+  width: 100%;
+  text-align: center;
+  margin-top: 1em;
+}
