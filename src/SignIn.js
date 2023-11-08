@@ -1,8 +1,9 @@
+// SignIn.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 import { useNavigate, useParams } from 'react-router-dom';
-
-const SignIn = () => {
+const SignIn = ({ isOpen, closeModal }) => {
   const { username } = useParams();
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -36,12 +37,19 @@ const SignIn = () => {
       console.log('Login Successful:', response.data);
     })
     .catch((error) => {
-      console.error('Login Failed:', error.response.data.error);
+      const errorMessage = error.response && error.response.data ? error.response.data.message : 'Something went wrong!';
+      console.error('Login Failed:', errorMessage);
     });
   };
 
   return (
-    <div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={closeModal}
+      contentLabel="Sign In"
+      className="modal-content"
+      overlayClassName="modal-overlay"
+      >
       <h1>Sign In Page</h1>
       <p>Username: {username}</p>
       <form onSubmit={handleSubmit}>
@@ -62,12 +70,13 @@ const SignIn = () => {
             id="email"
             value={email}
             onChange={handleEmailChange}
-			placeholder="(선택사항)비밀번호 분실시 사용됩니다."
+            placeholder="(선택사항)비밀번호 분실시 사용됩니다."
           />
         </div>
         <button type="submit">Submit</button>
       </form>
-    </div>
+      <button onClick={closeModal}>닫기</button>
+    </Modal>
   );
 };
 
