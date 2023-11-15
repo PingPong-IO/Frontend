@@ -6,7 +6,6 @@ import WebSocketComponent from './Ws';
 import SignIn from './SignIn';
 import StompComponent from './temp';
 import GameRoom from './game/GameRoom';
-import Rooms from './room/RoomList'
 import SingleMode from './game/SingleMode';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
           <Route path="/sign_in/:username" element={<SignIn />} />
           <Route path="/game-room/:roomName" element={<GameRoom />} />
           <Route path="/single/:roomName" element={<SingleMode />} />
-          <Route path="/rooms" element={<Rooms />} />
           {/* 다른 페이지 라우트를 추가하세요. */}
         </Routes>
       </div>

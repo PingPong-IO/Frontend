@@ -56,6 +56,7 @@ const StompComponent = () => {
   useEffect(() => {
     console.log('page mounted');
     initializeSocket(nickname);
+    localStorage.setItem('nickname', nickname);
     socket.current = getStompSocket();
     if (!socket.current) {
       console.log('socket is null');
@@ -122,6 +123,25 @@ const StompComponent = () => {
       socket.current.send('/stomp/matchingJoin', {}, JSON.stringify(payload));
     }
   };
+
+  const handleSoloRankedPlay = () => {
+    if (socket.current) {
+      const subscription = socket.current.subscribe(
+        `/topic/matching-success`,
+        (response) => {
+          const message = JSON.parse(response.body);
+          const gameRoomId = message.gameRoomId;
+          navigate(`/single/${gameRoomId}`, { state: { gameRoomId } });
+        },
+      );
+      const payload = {
+        mode: 'RANKED',
+        type: 'SOLO',
+      };
+      socket.current.send('/stomp/matchingJoin', {}, JSON.stringify(payload));
+    }
+  };
+
 
   useEffect(() => {
     let interval;

@@ -14,23 +14,23 @@ const GameRender = (canvasRef, gameElement) => {
   };
 
   const leftPaddle = {
-    x: (gameElement.leftPaddle.x * cvs.width) / 100,
-    y: (gameElement.leftPaddle.y * cvs.height) / 100,
-    width: (gameElement.leftPaddle.width * cvs.width) / 100,
-    height: (gameElement.leftPaddle.height * cvs.height) / 100,
+    x: (gameElement.paddleList[0].posX * cvs.width) / 100,
+    y: (gameElement.paddleList[0].posY * cvs.height) / 100,
+    width: (gameElement.paddleList[0].width * cvs.width) / 100,
+    height: (gameElement.paddleList[0].height * cvs.height) / 100,
   };
 
   const rightPaddle = {
-    x: (gameElement.rightPaddle.x * cvs.width) / 100,
-    y: (gameElement.rightPaddle.y * cvs.height) / 100,
-    width: (gameElement.rightPaddle.width * cvs.width) / 100,
-    height: (gameElement.rightPaddle.height * cvs.height) / 100,
+    x: (gameElement.paddleList[1].posX * cvs.width) / 100,
+    y: (gameElement.paddleList[1].posY * cvs.height) / 100,
+    width: (gameElement.paddleList[1].width * cvs.width) / 100,
+    height: (gameElement.paddleList[1].height * cvs.height) / 100,
   };
 
   const ball = {
-    x: (gameElement.ball.x * cvs.width) / 100,
-    y: (gameElement.ball.y * cvs.height) / 100,
-    radius: (gameElement.ball.radius * ((cvs.width + cvs.height) / 2)) / 100,
+    x: (gameElement.ballList[0].posX * cvs.width) / 100,
+    y: (gameElement.ballList[0].posY * cvs.height) / 100,
+    radius: (gameElement.ballList[0].radius * ((cvs.width + cvs.height) / 2)) / 100,
   };
 
   const drawPaddle = (x, y, width, height, color) => {
