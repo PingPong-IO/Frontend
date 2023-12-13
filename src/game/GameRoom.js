@@ -28,6 +28,8 @@ const GameRoom = () => {
   const socket = useRef(null);
   const [keyPressed, setKeyPressed] = useState(0);
 
+  const [resultId, setResultId] = useState("");
+
   useEffect(() => {
     socket.current = getStompSocket();
     subscribeToPositionUpdate();
@@ -38,6 +40,10 @@ const GameRoom = () => {
       console.log('page unmounted');
     };
   }, []);
+
+  const updateResultId = (newResultId) => {
+    setResultId(newResultId);
+  };
 
   const subscribeToPositionUpdate = () => {
     console.log('subscribeToPositionUpdate');
@@ -56,6 +62,8 @@ const GameRoom = () => {
     const subscription = socket.current.subscribe(
       `/topic/finish_game/${gameRoomId}`,
       (response) => {
+        const data = JSON.parse(response.body);
+        updateResultId(data.resultId);
         console.log('finish game');
         setIsModalVisible(true);
         setGameFinished(true);
@@ -92,7 +100,7 @@ const GameRoom = () => {
     socket.current.send(
       `/stomp/game_restart`,
       {},
-      JSON.stringify({ gameRoomId }),
+      JSON.stringify({ gameRoomId, resultId }),
     );
   };
 

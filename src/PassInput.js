@@ -14,7 +14,7 @@ const PassInput = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-	const apiUrl = 'http://localhost:8080/api/users/login';
+	const apiUrl = 'http://localhost:8081/api/users/login';
     const requestData = {
       nickname: username,
       password: password,

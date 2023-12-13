@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import GameRender from './GameRender';
 import { getStompSocket } from '../api/StompSocket';
 import PaddleManager from './PaddleManager';
+import GameSoloRankedRender from './Render/GameSoloRankedRender';
+import GameFinishModal from './GameFinishModal';
+import OpponentExitModal from './OpponentExitModal';
 
 const initialCanvasSize = {
   width: 600,
@@ -18,9 +21,14 @@ const SingleMode = () => {
     width: window.innerWidth * 0.8,
     height: window.innerHeight * 0.8,
   });
+  const navigate = useNavigate();
   const canvasRef = useRef(null);
   const socket = useRef(null);
   const [keyPressed, setKeyPressed] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [OpponentExitModalVisible, setOpponentExitModalVisible] =
+    useState(false);
 
   useEffect(() => {
     socket.current = getStompSocket();
@@ -38,7 +46,7 @@ const SingleMode = () => {
       (response) => {
         console.log(`canvas height: ${canvasRef.current.height}`);
         const message = JSON.parse(response.body);
-        GameRender(canvasRef, message);
+        GameSoloRankedRender(canvasRef, message);
       },
     );
   };
@@ -49,6 +57,8 @@ const SingleMode = () => {
       `/topic/finish_game/${gameRoomId}`,
       (response) => {
         console.log('finish game');
+        setIsModalVisible(true);
+        setGameFinished(true);
       },
     );
   };
@@ -111,12 +121,55 @@ const SingleMode = () => {
     };
   }, [keyPressed]);
 
+  const navigateToHome = () => {
+    navigate(`/wstest/${localStorage.getItem('nickname')}`);
+  };
+
+  const handleRestart = () => {
+    //B 으로 재시작 이벤트 알림 보내기
+    socket.current.send(
+      `/stomp/game_restart`,
+      {},
+      JSON.stringify({ gameRoomId }),
+    );
+    setIsModalVisible(false);
+    setOpponentExitModalVisible(false);
+    setGameFinished(false);
+  };
+
+  const handleExit = () => {
+    setIsModalVisible(false);
+    socket.current.send(
+      `/stomp/game_room_exit`,
+      {},
+      JSON.stringify({ gameRoomId }),
+    );
+    navigateToHome();
+  };
+
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
       <canvas
         ref={canvasRef}
         width={canvasSize.width}
         height={canvasSize.height}
+      />
+      <GameFinishModal
+        isVisible={isModalVisible}
+        onRestart={handleRestart}
+        onExit={handleExit}
+      />
+      <OpponentExitModal
+        isVisible={OpponentExitModalVisible}
+        goHome={navigateToHome}
       />
       {/* <PaddleManager open={true} gameRoomId={gameRoomId} /> */}
     </div>

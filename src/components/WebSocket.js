@@ -8,7 +8,7 @@ function WebSocketComponent() {
   useEffect(() => {
     if (!socket) {
       // 소켓을 설정하고 연결
-      const newSocket = new WebSocket('ws://localhost:8080/websocket/game2');
+      const newSocket = new WebSocket('ws://localhost:8081/websocket/game2');
       setSocket(newSocket);
     }
   }, [socket, setSocket]);

@@ -52,7 +52,7 @@ const WebSocketComponent = () => {
 
   useEffect(() => {
     // WebSocket 객체 생성 및 연결
-    const newSocket = new SockJS('http://localhost:8080/websocket/game');
+    const newSocket = new SockJS('http://localhost:8081/websocket/game');
     setSocket(newSocket);
     newSocket.onopen = () => console.log('WebSocket Connected!');
     newSocket.onmessage = (event) => {

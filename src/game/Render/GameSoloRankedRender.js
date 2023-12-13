@@ -6,10 +6,10 @@ const GameSoloRankedRender = (canvasRef, gameElement) => {
 	if (!ctx) return;
   
 	const leftPaddle = {
-	  x: (gameElement.paddleList[0].posX * cvs.width) / 100,
-	  y: (gameElement.paddleList[0].posY * cvs.height) / 100,
-	  width: (gameElement.paddleList[0].width * cvs.width) / 100,
-	  height: (gameElement.paddleList[0].height * cvs.height) / 100,
+	  x: (gameElement.leftPaddlePosX * cvs.width) / 100,
+	  y: (gameElement.leftPaddlePosY * cvs.height) / 100,
+	  width: (gameElement.paddleWidth * cvs.width) / 100,
+	  height: (gameElement.paddleHeight * cvs.height) / 100,
 	};
 
 	const drawPaddle = (x, y, width, height, color) => {
@@ -33,7 +33,7 @@ const GameSoloRankedRender = (canvasRef, gameElement) => {
   
 	const render = () => {
 	  drawPaddle(0, 0, cvs.width, cvs.height, 'BLACK');
-	  drawScore(gameElement.score, cvs.width / 4, cvs.height / 5, 'WHITE');
+	  drawScore(gameElement.score, (2 * cvs.width) / 4, cvs.height / 5, 'WHITE');
 	  drawPaddle(
 		leftPaddle.x,
 		leftPaddle.y,
@@ -49,6 +49,14 @@ const GameSoloRankedRender = (canvasRef, gameElement) => {
 		};
 		drawBall(ball.x, ball.y, ball.radius, 'WHITE');
 	  });
+	  gameElement.itemList.forEach((itemData) => {
+		const item = {
+			x: itemData.posX * cvs.width / 100,
+			y: itemData.posY * cvs.height / 100,
+			radius: itemData.radius * ((cvs.width + cvs.height) / 2) / 100,
+		};
+		drawBall(item.x, item.y, item.radius, 'PURPLE');
+	});
 	};
 	const game = () => {
 	  render();
